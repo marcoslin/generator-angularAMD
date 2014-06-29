@@ -1,0 +1,40 @@
+{
+  "sayIt": "Just saying it from setting.json",
+  "extdeps": {
+    "vers": {
+      "angular": "1.2.18",
+      "angularAMD": "0.1.1",
+      "jquery": "2.1.1",
+      "requirejs": "2.1.14"
+    },
+    "bower": {
+      "angular": {
+        "entry": "<%= extdeps.vers.angular %>",
+        "file": "angular/angular.js",
+        "minfile": "angular/angular.min.js"
+      },
+      "angularAMD": {
+        "entry": "<%= extdeps.vers.angularAMD %>",
+        "file": [ "angularAMD.js", "ngload.js" ],
+        "minfile": [ "angularAMD.min.js", "ngload.min.js" ]
+      },
+      "jquery": {
+        "entry": "<%= extdeps.vers.jquery %>",
+        "file": "jquery/dist/jquery.js",
+        "minfile": "jquery/dist/jquery.min.js"
+      },
+      "requirejs": {
+        "entry": { "requirejs": "<%= extdeps.vers.requirejs %>" },
+        "file": "requirejs/dist/require.js"
+      }
+    },
+    "package": {
+      "grunt": {
+        "entry": "^0.4.5"
+      },
+      "load-grunt-tasks": {
+        "entry": "^0.6.0"
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+<% var firstEntry=true %>{
+  "name": "<%= aamd.appname %>",
+  "version": "0.0.0",
+  "dependencies": {
+    <%_.forEach(aamd.bower, function (value, key) {%><%if (firstEntry) { firstEntry=false } else { print(', ') }%>"<%= key %>": "<%= value %>"
+    <%})%>
+  }
+}
