@@ -1,0 +1,16 @@
+define(['angularAMD', 'angular-route'], function (angularAMD) {
+  var app = angular.module("<%= aamd.appname %>", ['ngRoute']);
+
+  app.config(['$routeProvider', function ($routeProvider) {
+    $routeProvider
+      .when("/home", angularAMD.route({
+        templateUrl: 'views/home.html', controllerUrl: 'controller/home_ctrl'
+      }))
+
+      // Else
+      .otherwise({redirectTo: "/home"});
+  }]);
+
+  return angularAMD.bootstrap(app);
+
+});

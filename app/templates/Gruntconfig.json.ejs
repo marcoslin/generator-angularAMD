@@ -1,0 +1,14 @@
+{
+  "configVars": <%= JSON.stringify(aamd.configVars, null, "  ") %>,
+  "bowerFiles": [
+    <%_.each(aamd.bowerFiles, function (value, index) {%><%if (index>0) { print (',') }%>"<%= value %>"
+<%})%>
+  ],
+  "cssFiles": [
+    <%_.each(aamd.cssFiles, function (value, index) {%><%if (index>0) { print (',') }%>"<%= value %>"
+<%})%>
+  ],
+  "buildFiles": [
+    "images/**"
+  ]
+}

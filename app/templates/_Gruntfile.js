@@ -11,42 +11,10 @@ module.exports = function (grunt) {
    *       when cwd has been changed to `app` and grunt needs to reference './setup'
    */
   var gruntConfig = grunt.file.readJSON('Gruntconfig.json');
-  var configVars = gruntConfig.configVars;
-
-  function getCSSFiles(useMinVersion) {
-    var fileExt = '.css';
-
-    if (useMinVersion) { fileExt = '.min.css'; }
-
-    var fileList = [
-        'bootstrap/dist/css/bootstrap' + fileExt
-    ];
-
-    return fileList;
-  }
-
-  function getJSFiles(useMinVersion) {
-    var fileExt = '.js';
-
-    if (useMinVersion) { fileExt = '.min.js'; }
-
-    var fileList = [
-        'angular/angular' + fileExt,
-        'angular-route/angular-route' + fileExt,
-        'angular-resource/angular-resource' + fileExt,
-        'angularAMD/angularAMD' + fileExt,
-        'angularAMD/ngload' + fileExt,
-        'jquery/dist/jquery' + fileExt,
-        'raphael/raphael' + fileExt,
-        'chart.js/chart' + fileExt
-    ];
-
-    return fileList;
-  }
 
   // Grunt Config
   grunt.initConfig({
-    cvars: configVars,
+    cvars: gruntConfig.configVars,
     bower: {
       setup: {
         options: { install: true, copy: false }
@@ -58,29 +26,23 @@ module.exports = function (grunt) {
           // Javascript with standard .min.js naming convention
           {
             cwd: 'bower_components', expand: true, flatten: true,
-            dest: '<%= cvars.www %>/js/ext/',
-            src: getJSFiles()
-          },
-          // Javascript with non standard name
-          {
-            cwd: 'bower_components', expand: true, flatten: true,
-            dest: '<%= cvars.www %>/js/ext/',
-            src: ['requirejs/require.js', 'globalize/lib/globalize.js', 'jquery-flot/jquery.flot.*']
+            dest: '<%= cvars.app %>/<%= cvars.appjs %>/ext/',
+            src: gruntConfig.bowerFiles
           },
           // CSS with standard .min.css naming convention
           {
             cwd: 'bower_components', expand: true, flatten: true,
-            dest: '<%= cvars.www %>/css/ext/',
-            src: getCSSFiles()
+            dest: '<%= cvars.app %>/<%= cvars.appcss %>/ext/',
+            src: gruntConfig.cssFiles
           }
         ]
       },
       build: {
         files: [
           {
-            cwd: '<%= cvars.www %>/', expand: true,
+            cwd: '<%= cvars.app %>/', expand: true,
             dest: '<%= cvars.build %>/',
-            src: ['images/**', 'data/**']
+            src: gruntConfig.buildFiles
           }
         ]
       },
@@ -94,28 +56,26 @@ module.exports = function (grunt) {
         ]
       }
     },
-
     clean: {
       options: { force: true },
       build: ['<%= cvars.build %>'],
       deploy: [
-        '<%= cvars.dist %>/*',
-        '!<%= cvars.dist %>/.git/',
+        '<%= cvars.dist %>/*'
       ]
     },
     cssmin: {
       build: {
         files: {
-          '<%= cvars.build %>/css/style.css': [
+          '<%= cvars.build %>/<%= cvars.appcss %>/style.css': [
             'bower_components/bootstrap/dist/css/bootstrap.min.css',
-            '<%= cvars.www %>/css/style.css'
+            '<%= cvars.app %>/<%= cvars.appcss %>/style.css'
           ]
         }
       }
     },
     preprocess: {
       build: {
-        src : '<%= cvars.www %>/index.html',
+        src : '<%= cvars.app %>/index.html',
         dest : '<%= cvars.build %>/index.build.html'
       }
     },
@@ -136,7 +96,7 @@ module.exports = function (grunt) {
         files: [
           { '<%= cvars.build %>/index.html': '<%= cvars.build %>/index.build.html' },
           {
-            cwd: '<%= cvars.www %>/view/', expand: true, flatten: false,
+            cwd: '<%= cvars.app %>/view/', expand: true, flatten: false,
             dest: '<%= cvars.build %>/view/',
             src: ['*.html']
           }
@@ -165,8 +125,8 @@ module.exports = function (grunt) {
     requirejs: {
       build: {
         options: {
-          baseUrl: '<%= cvars.www %>/js',
-          mainConfigFile: '<%= cvars.www %>/js/main.js',
+          baseUrl: '<%= cvars.app %>/js',
+          mainConfigFile: '<%= cvars.app %>/js/main.js',
           removeCombined: true,
           findNestedDependencies: true,
           optimize: 'none',
@@ -222,14 +182,14 @@ module.exports = function (grunt) {
     jshint: {
       build: {
         options: {
-          jshintrc: '<%= cvars.www %>/js/jshintrc.json'
+          jshintrc: '<%= cvars.app %>/js/jshintrc.json'
         },
         files: {
           src: [
-            '<%= cvars.www %>/js/*.js',
-            '<%= cvars.www %>/js/controller/*.js',
-            '<%= cvars.www %>/js/directive/*.js',
-            '<%= cvars.www %>/js/provider/*.js'
+            '<%= cvars.app %>/js/*.js',
+            '<%= cvars.app %>/js/controller/*.js',
+            '<%= cvars.app %>/js/directive/*.js',
+            '<%= cvars.app %>/js/provider/*.js'
           ]
         }
       }
@@ -237,7 +197,7 @@ module.exports = function (grunt) {
 
     watch: {
       www: {
-        files: ['<%= cvars.www %>/**/*'],
+        files: ['<%= cvars.app %>/**/*'],
         tasks: [],
         options: {
           spawn: false,
@@ -249,8 +209,8 @@ module.exports = function (grunt) {
       server: {
         livereload: true,
         options: {
-          port: configVars.port,
-          base: '<%= cvars.www %>'
+          port: gruntConfig.configVars.port,
+          base: '<%= cvars.app %>'
         }
       }
     }

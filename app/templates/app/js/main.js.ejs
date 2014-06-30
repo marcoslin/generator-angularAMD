@@ -1,0 +1,25 @@
+require.config({
+  baseUrl: "<%= aamd.configVars.appjs %>/",
+
+  // alias libraries paths.  Must set 'angular'
+  paths: {
+    <%_.each(aamd.mainJsFiles, function (filename, index) {%><%if (index>0) { print(', ') }%>"<%= filename %>": "ext/<%= filename %>"
+    <%})%>
+  },
+
+  // Add angular modules that does not support AMD out of the box, put it in a shim
+  shim: {
+    'angularAMD': ['angular']
+    , 'ngload': ['angularAMD']
+    , 'angular-route': ['angular']
+    <% if (_.indexOf(aamd.mainJsFiles, 'jquery') > 0) { %>, 'angular': ['jquery']<%}%>
+    <% if (_.indexOf(aamd.mainJsFiles, 'angular-animate') > 0) { %>, 'angular-animate': ['angular']<%}%>
+    <% if (_.indexOf(aamd.mainJsFiles, 'angular-cookies') > 0) { %>, 'angular-cookies': ['angular']<%}%>
+    <% if (_.indexOf(aamd.mainJsFiles, 'angular-resource') > 0) { %>, 'angular-resource': ['angular']<%}%>
+    <% if (_.indexOf(aamd.mainJsFiles, 'angular-sanitize') > 0) { %>, 'angular-sanitize': ['angular']<%}%>
+    <% if (_.indexOf(aamd.mainJsFiles, 'angular-touch') > 0) { %>, 'angular-touch': ['angular']<%}%>
+  },
+
+  // kick start application
+  deps: ['app']
+});

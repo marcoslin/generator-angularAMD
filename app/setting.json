@@ -1,8 +1,16 @@
 {
-  "sayIt": "Just saying it from setting.json",
+  "configVars": {
+    "app": "app",
+    "appjs": "scripts",
+    "appcss": "styles",
+    "build": "build",
+    "dist": "dist",
+    "hostname": "localhost",
+    "port": 8080
+  },
   "extdeps": {
     "vers": {
-      "angular": "1.2.18",
+      "angular": "1.2.16",
       "angularAMD": "0.1.1",
       "jquery": "2.1.1",
       "requirejs": "2.1.14"
@@ -13,10 +21,40 @@
         "file": "angular/angular.js",
         "minfile": "angular/angular.min.js"
       },
+      "angular-animate": {
+        "entry": "<%= extdeps.vers.angular %>",
+        "file": "angular-animate/angular-animate.js",
+        "minfile": "angular-animate/angular-animate.min.js"
+      },
+      "angular-cookies": {
+        "entry": "<%= extdeps.vers.angular %>",
+        "file": "angular-cookies/angular-cookies.js",
+        "minfile": "angular-cookies/angular-cookies.min.js"
+      },
+      "angular-resource": {
+        "entry": "<%= extdeps.vers.angular %>",
+        "file": "angular-resource/angular-resource.js",
+        "minfile": "angular-resource/angular-resource.min.js"
+      },
+      "angular-route": {
+        "entry": "<%= extdeps.vers.angular %>",
+        "file": "angular-route/angular-route.js",
+        "minfile": "angular-route/angular-route.min.js"
+      },
+      "angular-sanitize": {
+        "entry": "<%= extdeps.vers.angular %>",
+        "file": "angular-sanitize/angular-sanitize.js",
+        "minfile": "angular-sanitize/angular-sanitize.min.js"
+      },
+      "angular-touch": {
+        "entry": "<%= extdeps.vers.angular %>",
+        "file": "angular-touch/angular-touch.js",
+        "minfile": "angular-touch/angular-touch.min.js"
+      },
       "angularAMD": {
-        "entry": "<%= extdeps.vers.angularAMD %>",
-        "file": [ "angularAMD.js", "ngload.js" ],
-        "minfile": [ "angularAMD.min.js", "ngload.min.js" ]
+        "entry": "https://github.com/marcoslin/angularAMD.git#v0.2.0-rc.1",
+        "file": [ "angularAMD/dist/angularAMD.js", "angularAMD/dist/ngload.js" ],
+        "minfile": [ "angularAMD/angularAMD.min.js", "angularAMD/ngload.min.js" ]
       },
       "jquery": {
         "entry": "<%= extdeps.vers.jquery %>",
@@ -25,16 +63,73 @@
       },
       "requirejs": {
         "entry": { "requirejs": "<%= extdeps.vers.requirejs %>" },
-        "file": "requirejs/dist/require.js"
+        "file": "requirejs/require.js"
+      },
+      "es5-shim": {
+        "entry": "~3.4.0",
+        "file": "es5-shim/es5-shim.js"
+      },
+      "json3": {
+        "entry": "~3.3.2",
+        "file": "json3/lib/json3.js"
       }
     },
     "package": {
-      "grunt": {
-        "entry": "^0.4.5"
-      },
-      "load-grunt-tasks": {
-        "entry": "^0.6.0"
-      }
+      "grunt": "^0.4.5",
+      "grunt-autoprefixer": "^0.7.3",
+      "grunt-bower-task": "~0.3.2",
+      "grunt-concurrent": "^0.5.0",
+      "grunt-contrib-concat": "^0.4.0",
+      "grunt-contrib-connect": "^0.7.1",
+      "grunt-contrib-copy": "^0.5.0",
+      "grunt-contrib-cssmin": "^0.9.0",
+      "grunt-contrib-htmlmin": "^0.3.0",
+      "grunt-contrib-jshint": "^0.10.0",
+      "grunt-contrib-uglify": "^0.4.0",
+      "grunt-contrib-watch": "^0.5.3",
+      "grunt-filerev": "^0.2.1",
+      "grunt-google-cdn": "^0.4.0",
+      "grunt-newer": "^0.7.0",
+      "grunt-ngmin": "^0.0.3",
+      "grunt-svgmin": "^0.4.0",
+      "grunt-usemin": "^2.1.1",
+      "jshint-stylish": "^0.2.0",
+      "load-grunt-tasks": "^0.4.0",
+      "time-grunt": "^0.3.1"
     }
+  },
+  "prompts": {
+    "module": {
+      "type": "checkbox",
+      "name": "modules",
+      "message": "Which modules would you like to include?",
+      "choices": [
+        {
+          "value": "jquery",
+          "name": "jquery"
+        },
+        {
+          "value": "angular-animate",
+          "name": "angular-animate"
+        },
+        {
+          "value": "angular-cookies",
+          "name": "angular-cookies"
+        },
+        {
+          "value": "angular-resource",
+          "name": "angular-resource"
+        },
+        {
+          "value": "angular-sanitize",
+          "name": "angular-sanitize"
+        },
+        {
+          "value": "angular-touch",
+          "name": "angular-touch"
+        }
+      ]
+    }
+
   }
 }
