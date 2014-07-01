@@ -1,4 +1,4 @@
-# generator-angularAMD [![Build Status](https://secure.travis-ci.org/marcoslin/generator-angularamd.png?branch=master)](https://travis-ci.org/marcoslin/generator-angularamd)
+# generator-angularAMD v0.1.0-alpha.1 [![Build Status](https://secure.travis-ci.org/marcoslin/generator-angularamd.png?branch=master)](https://travis-ci.org/marcoslin/generator-angularamd)
 
 > [Yeoman](http://yeoman.io) generator
 
@@ -32,7 +32,7 @@ $ npm install -g generator-angularamd
 Finally, initiate the generator:
 
 ```bash
-$ yo angularAMD
+$ yo angularamd
 ```
 
 ### Getting To Know Yeoman

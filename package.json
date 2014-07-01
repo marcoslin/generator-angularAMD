@@ -4,7 +4,7 @@
   "description": "angularAMD Yeoman Generator",
   "license": "MIT",
   "main": "app/index.js",
-  "repository": "marcoslin/generator-angularamd",
+  "repository": "https://github.com/marcoslin/generator-angularAMD.git",
   "author": {
     "name": "Marcos Lin",
     "email": "",
