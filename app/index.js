@@ -55,7 +55,7 @@ AAmdGenerator.prototype.askForModules = function () {
     'angular-route',
     'angularAMD',
     'requirejs',
-    // 'es5-shim',
+    'es5-shim',
     'json3'
   ];
 
