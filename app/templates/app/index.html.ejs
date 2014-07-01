@@ -28,10 +28,10 @@
   ga('send', 'pageview');
 </script>
 
-<!--[if lt IE 9]>
-<script src="<%= aamd.configVars.appjs %>/ext/es5-shim.js"></script>
-<script src="<%= aamd.configVars.appjs %>/ext/json3.min.js"></script>
-<![endif]-->
+<% if (!_.isEmpty(deps.htmlJsFiles)) {%>
+<!--[if lt IE 9]><% _.each(deps.htmlJsFiles, function (jsfile) {%>
+<script src="<%= jsfile %>"></script><%})%>
+<![endif]--><%}%>
 
 <!-- @exclude -->
 <script type="text/javascript" src="http://<%= aamd.configVars.hostname %>:<%= aamd.configVars.port %>/livereload.js?snipver=1"></script>

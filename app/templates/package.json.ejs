@@ -1,8 +1,7 @@
-<% var firstEntry=true %>{
-  "name": "<%= aamd.appname %>",
-  "version": "0.0.0",
-  "dependencies": {
-    <%_.forEach(aamd.package, function (value, key) {%><%if (firstEntry) { firstEntry=false } else { print(', ') }%>"<%= key %>": "<%= value %>"
-    <%})%>
-  }
+{
+
+"name": "<%= aamd.appname %>",
+"version": "0.0.0",
+"dependencies": <%= JSON.stringify(deps.npm, null, "  ") %>
+
 }

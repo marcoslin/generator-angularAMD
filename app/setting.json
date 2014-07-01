@@ -10,71 +10,152 @@
   },
   "extdeps": {
     "vers": {
-      "angular": "1.2.16",
-      "angularAMD": "0.1.1",
-      "jquery": "2.1.1",
-      "requirejs": "2.1.14"
+      "angular": "1.2.16"
     },
     "bower": {
       "angular": {
-        "entry": "<%= extdeps.vers.angular %>",
-        "file": "angular/angular.js",
-        "minfile": "angular/angular.min.js"
+        "version": "<%= extdeps.vers.angular %>",
+        "jsfiles": {
+          "angular/angular.js": {
+            "min": true
+          }
+        }
       },
       "angular-animate": {
-        "entry": "<%= extdeps.vers.angular %>",
-        "file": "angular-animate/angular-animate.js",
-        "minfile": "angular-animate/angular-animate.min.js"
+        "version": "<%= extdeps.vers.angular %>",
+        "jsfiles": {
+          "angular-animate/angular-animate.js": {
+            "min": true,
+            "ngName": "ngAnimate",
+            "shim": ["angular"]
+          }
+        }
       },
       "angular-cookies": {
-        "entry": "<%= extdeps.vers.angular %>",
-        "file": "angular-cookies/angular-cookies.js",
-        "minfile": "angular-cookies/angular-cookies.min.js"
+        "version": "<%= extdeps.vers.angular %>",
+        "jsfiles": {
+          "angular-cookies/angular-cookies.js": {
+            "min": true,
+            "ngName": "ngCookies",
+            "shim": ["angular"]
+          }
+        }
       },
       "angular-resource": {
-        "entry": "<%= extdeps.vers.angular %>",
-        "file": "angular-resource/angular-resource.js",
-        "minfile": "angular-resource/angular-resource.min.js"
+        "version": "<%= extdeps.vers.angular %>",
+        "jsfiles": {
+          "angular-resource/angular-resource.js": {
+            "min": true,
+            "ngName": "ngResource",
+            "shim": ["angular"]
+          }
+        }
       },
       "angular-route": {
-        "entry": "<%= extdeps.vers.angular %>",
-        "file": "angular-route/angular-route.js",
-        "minfile": "angular-route/angular-route.min.js"
+        "version": "<%= extdeps.vers.angular %>",
+        "jsfiles": {
+          "angular-route/angular-route.js": {
+            "min": true,
+            "ngName": "ngRoute",
+            "shim": ["angular"]
+          }
+        }
       },
       "angular-sanitize": {
-        "entry": "<%= extdeps.vers.angular %>",
-        "file": "angular-sanitize/angular-sanitize.js",
-        "minfile": "angular-sanitize/angular-sanitize.min.js"
+        "version": "<%= extdeps.vers.angular %>",
+        "jsfiles": {
+          "angular-sanitize/angular-sanitize.js": {
+            "min": true,
+            "ngName": "ngSanitize",
+            "shim": ["angular"]
+          }
+        }
       },
       "angular-touch": {
-        "entry": "<%= extdeps.vers.angular %>",
-        "file": "angular-touch/angular-touch.js",
-        "minfile": "angular-touch/angular-touch.min.js"
+        "version": "<%= extdeps.vers.angular %>",
+        "jsfiles": {
+          "angular-touch/angular-touch.js": {
+            "min": true,
+            "ngName": "ngTouch",
+            "shim": ["angular"]
+          }
+        }
       },
       "angularAMD": {
-        "entry": "https://github.com/marcoslin/angularAMD.git#v0.2.0-rc.1",
-        "file": [ "angularAMD/dist/angularAMD.js", "angularAMD/dist/ngload.js" ],
-        "minfile": [ "angularAMD/angularAMD.min.js", "angularAMD/ngload.min.js" ]
+        "version": "https://github.com/marcoslin/angularAMD.git#v0.2.0-rc.1",
+        "jsfiles": {
+          "angularAMD/dist/angularAMD.js": {
+            "min": true,
+            "shim": ["angular"]
+          },
+          "angularAMD/dist/ngload.js": {
+            "min": true,
+            "shim": ["angularAMD"]
+          }
+        }
       },
       "jquery": {
-        "entry": "<%= extdeps.vers.jquery %>",
-        "file": "jquery/dist/jquery.js",
-        "minfile": "jquery/dist/jquery.min.js"
+        "version": "2.1.1",
+        "jsfiles": {
+          "jquery/dist/jquery.js": {
+            "min": true
+          }
+        }
       },
       "requirejs": {
-        "entry": { "requirejs": "<%= extdeps.vers.requirejs %>" },
-        "file": "requirejs/require.js"
+        "version": { "requirejs": "2.1.14" },
+        "jsfiles": {
+          "requirejs/require.js": {
+            "min": false
+          }
+        }
+      },
+      "bootstrap": {
+        "version": "~3.2.0",
+        "jsfiles": {
+          "bootstrap/dist/js/bootstrap.js": {
+            "min": true
+          }
+        },
+        "cssfiles": [
+          {
+            "bootstrap/dist/css/bootstrap.css": {
+              "min": false
+            }
+          },
+          {
+            "bootstrap/dist/css/bootstrap-theme.css": {
+              "min": false
+            }
+          }
+        ],
+        "cssfonts": [
+          "bootstrap/dist/fonts/glyphicons-halflings-regular.eot",
+          "bootstrap/dist/fonts/glyphicons-halflings-regular.svg",
+          "bootstrap/dist/fonts/glyphicons-halflings-regular.ttf",
+          "bootstrap/dist/fonts/glyphicons-halflings-regular.woff"
+        ]
       },
       "es5-shim": {
-        "entry": "~3.4.0",
-        "file": "es5-shim/es5-shim.js"
+        "version": "~3.4.0",
+        "jsfiles": {
+          "es5-shim/es5-shim.js": {
+            "min": true,
+            "htmlOnly": true
+          }
+        }
       },
       "json3": {
-        "entry": "~3.3.2",
-        "file": "json3/lib/json3.js"
+        "version": "~3.3.2",
+        "jsfiles": {
+          "json3/lib/json3.js": {
+            "min": true,
+            "htmlOnly": true
+          }
+        }
       }
     },
-    "package": {
+    "npm": {
       "grunt": "^0.4.5",
       "grunt-autoprefixer": "^0.7.3",
       "grunt-bower-task": "~0.3.2",
@@ -98,8 +179,8 @@
       "time-grunt": "^0.3.1"
     }
   },
-  "prompts": {
-    "module": {
+  "askFor": {
+    "modules": {
       "type": "checkbox",
       "name": "modules",
       "message": "Which modules would you like to include?",

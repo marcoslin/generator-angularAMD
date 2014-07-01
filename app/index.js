@@ -20,78 +20,155 @@ var AAmdGenerator = yeoman.generators.Base.extend({
     })();
     this.aamd = aamd;
 
-    // Add default packages to load.  True value means it should be copied to appjs/ext directory
-    this.aamd.bowerPackages = [
-      'angular',
-      'angular-route',
-      'angularAMD',
-      'requirejs',
-      'es5-shim',
-      'json3'
-    ];
+
+    // Read local config
+    var localConfig = this.config.getAll();
+
+    if (this._.isEmpty(localConfig)) {
+      this.config.set(aamd.configVars);
+    }
 
     // When done
     this.on('end', function () {
       if (!this.options['skip-install']) {
         this.installDependencies();
       }
+      this.config.save();
     });
   }
 });
 
+AAmdGenerator.prototype.welcome = function () {
+  this.log(yosay('Welcome to angularAMD generator.'));
+};
 
 /**
  * Prompt user for modules to include
  */
 AAmdGenerator.prototype.askForModules = function () {
-  var self = this, cb = this.async();
+  var self = this;
+  var done = this.async();
 
-  this.prompt([this.aamd.prompts.module], function (props) {
-    // Add the result to bowerPackages
-    this._.each(props.modules, function (value, index) {
-      self.aamd.bowerPackages.push(value);
-    });
+  // Add default modules to load
+  var answerModules = [
+    'angular',
+    'angular-route',
+    'angularAMD',
+    'requirejs',
+    // 'es5-shim',
+    'json3'
+  ];
 
-    cb();
-  }.bind(this));
+  this.prompt([this.aamd.askFor.modules], function (props) {
+    // Add the result to answerModules
+    Array.prototype.push.apply(answerModules, props.modules);
+    self.aamd.answerModules = answerModules;
+    done();
+  });
 
 };
 
-AAmdGenerator.prototype.configureExtDeps = function () {
+
+/**
+ * Configure dependencies based on result from askFor* tasks:
+ *
+ * deps.bower:
+ *   List of modules to be set in bower.json's `dependencies` entry
+ *
+ * deps.bowerFiles:
+ *   List of files to be copied from bower_componets by grunt setup task
+ *
+ * deps.mainJs:
+ *   List of dependencies to be set in the main.js
+ *
+ * deps.appDefine:
+ *   List of dependencies to be loaded at app.js' define statement
+ *
+ * deps.appModule:
+ *   List of ng-modules to be included in ngApp's dependencies
+ *
+ * deps.htmlJsFiles:
+ *   JS Files to be used only in the index.html
+ *
+ * deps.cssFile:
+ *   List of css files to be minified and concat into main.css
+ *
+ * deps.cssFont:
+ *   List of css font files
+ *
+ * dpes.npm:
+ *   List of dependencies to be set in the packages.json
+ */
+AAmdGenerator.prototype.configureDependencies = function () {
   var self = this;
+  var setting = this.aamd.extdeps.bower;
+  var deps = {
+    bower: {},
+    bowerFiles: [],
+    mainJs: {},
+    mainJsShim: {},
+    appDefine: ['angularAMD'],
+    appModule: [],
+    htmlJsFiles: [],
+    cssFiles: [],
+    cssFont: [],
+    npm: this.aamd.extdeps.npm
+  };
+
+  function addJsFile(jsfile, data, moduleKey) {
+    // RequireJS uses the file without js extension
+    var basename = path.basename(jsfile, '.js');
+    deps.bowerFiles.push(jsfile);
+
+    // Define main.js:paths, excluding requirejs and those js file that should be loaded in index.html
+    if (moduleKey !== 'requirejs' && !data.htmlOnly) {
+      deps.mainJs[basename] = 'ext/' + basename;
+    }
+
+    // Create shim
+    if (moduleKey === 'jquery') {
+      // jquery should load before angular
+      deps.mainJsShim.angular = 'jquery';
+    } else if (data.shim) {
+      deps.mainJsShim[basename] = data.shim;
+    }
+
+    // Create app dependency, skipping the angularAMD and requirejs
+    if (self._.indexOf(['angular', 'angularAMD', 'jquery', 'requirejs'], moduleKey) === -1) {
+      if (data.htmlOnly) {
+        deps.htmlJsFiles.push(jsfile);
+      } else {
+        deps.appDefine.push(basename);
+      }
+
+      if (data.ngName) {
+        deps.appModule.push(data.ngName);
+      }
+    }
+
+  }
 
   // Build bower entry
-  var bowerDeps = this.aamd.extdeps.bower,
-      bower = {}, bowerFiles = [], mainJsFiles = [];
+  this._.each(this.aamd.answerModules, function (moduleKey) {
+    // Build deps.bower
+    var entry = setting[moduleKey],
+        version = entry.version;
 
-  this._.forEach(this.aamd.bowerPackages, function (key, index) {
-    var entry = bowerDeps[key].entry;
-    if (self._.isObject(entry)) {
-      self._.assign(bower, entry);
+    // If version is an object, assume it's an entry for bower
+    if (self._.isObject(version)) {
+      self._.assign(deps.bower, version);
     } else {
-      bower[key] = entry;
+      // Assuming a version string
+      deps.bower[moduleKey] = version;
     }
 
-    var file = bowerDeps[key].file;
-    if (self._.isArray(file)) {
-      self._.each(file, function (value, index) {
-        bowerFiles.push(value);
-        mainJsFiles.push(path.basename(value, '.js'));
-      });
-    } else {
-      bowerFiles.push(file);
-      mainJsFiles.push(path.basename(file, '.js'));
-    }
+    // Build deps.bowerFiles and
+    self._.each(entry.jsfiles, function (data, jsfile) {
+      addJsFile(jsfile, data, moduleKey);
+    });
   });
 
-  this.aamd.bower = bower;
-  this.aamd.bowerFiles = bowerFiles;
-  this.aamd.mainJsFiles = mainJsFiles;
-
-  // Build package entry
-  var pkg = {};
-  this._.assign(pkg, this.aamd.extdeps.package);
-  this.aamd.package = pkg;
+  this.deps = deps;
 };
 
 AAmdGenerator.prototype.setupApps = function () {
@@ -100,7 +177,6 @@ AAmdGenerator.prototype.setupApps = function () {
   this.mkdir(configVars.app);
   this.mkdir(configVars.app + '/views');
   this.mkdir(configVars.app + '/images');
-
 
   this.template('package.json.ejs', 'package.json');
   this.template('bower.json.ejs', 'bower.json');
@@ -118,8 +194,6 @@ AAmdGenerator.prototype.setupApps = function () {
   this.template('app/js/app.js.ejs', configVars.app + '/' + configVars.appjs + '/app.js');
   this.template('app/js/main.js.ejs', configVars.app + '/' + configVars.appjs + '/main.js');
   this.copy('app/js/controller/home_ctrl.js', configVars.app + '/' + configVars.appjs + '/controller/home_ctrl.js');
-
-  this.config.save();
 };
 
 
