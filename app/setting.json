@@ -6,6 +6,7 @@
     "build": "build",
     "dist": "dist",
     "hostname": "0.0.0.0",
+    "livereloadPort": 35729,
     "port": 8080
   },
   "extdeps": {

@@ -207,7 +207,7 @@ module.exports = function (grunt) {
     },
     connect: {
       server: {
-        livereload: true,
+        livereload: gruntConfig.configVars.livereloadPort,
         options: {
           hostname: "<%= cvars.hostname %>",
           port: gruntConfig.configVars.port,

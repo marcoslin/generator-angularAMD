@@ -16,6 +16,14 @@ var AAmdGenerator = yeoman.generators.Base.extend({
       var resultJson = JSON.parse(self._.template(settingText, settingJson));
       var appname = self.appname || path.basename(process.cwd());
       resultJson.appname = self._.camelize(self._.slugify(self._.humanize(appname)));
+
+      // Create hostname to be used in the browser
+      if (resultJson.configVars.hostname === "0.0.0.0") {
+        resultJson.hostnameBrowser = "localhost";
+      } else {
+        resultJson.hostnameBrowser = resultJson.configVars.hostname;
+      }
+
       return resultJson;
     })();
     this.aamd = aamd;
