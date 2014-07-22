@@ -229,7 +229,7 @@ module.exports = function (grunt) {
    * devel task
    * Launch webserver and watch for changes
    */
-  grunt.registerTask('devel', [
+  grunt.registerTask('serve', [
     'connect:server', 'watch:www'
   ]);
 
